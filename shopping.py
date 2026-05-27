@@ -58,7 +58,7 @@ def product_form():
     HEIGHT = 500
 
     x = (SCREEN_WIDTH - WIDTH) // 2
-    y = (SCREEN_WIDTH - HEIGHT) // 2
+    y = (SCREEN_HEIGHT - HEIGHT) // 2
 
     window.geometry(f'{WIDTH}x{HEIGHT}+{x}+{y}')
 
