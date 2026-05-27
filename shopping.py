@@ -45,38 +45,43 @@ def remove_product():
     except:
         messagebox.showerror('Błąd', 'Nie zaznaczono rekordu do usunięcia')
 
-window = tk.Tk()
-window.title('Lista zakupów')
+def product_form():
+    global tree, entry_product
+    
+    window = tk.Tk()
+    window.title('Lista zakupów')
 
-SCREEN_WIDTH = window.winfo_screenwidth()
-SCREEN_HEIGHT = window.winfo_screenheight()
+    SCREEN_WIDTH = window.winfo_screenwidth()
+    SCREEN_HEIGHT = window.winfo_screenheight()
 
-WIDTH = 400
-HEIGHT = 500
+    WIDTH = 400
+    HEIGHT = 500
 
-x = (SCREEN_WIDTH - WIDTH) // 2
-y = (SCREEN_WIDTH - HEIGHT) // 2
+    x = (SCREEN_WIDTH - WIDTH) // 2
+    y = (SCREEN_WIDTH - HEIGHT) // 2
 
-window.geometry(f'{WIDTH}x{HEIGHT}+{x}+{y}')
+    window.geometry(f'{WIDTH}x{HEIGHT}+{x}+{y}')
 
-# wprowadzenie danych
-entry_product = tk.Entry(window, width=40)
-entry_product.pack(pady=10)
+    # wprowadzenie danych
+    entry_product = tk.Entry(window, width=40)
+    entry_product.pack(pady=10)
 
-# przyciski
-product_add = tk.Button(window, text="Dodaj produkt", command=add_new_product)
-product_add.pack(pady=5)
+    # przyciski
+    product_add = tk.Button(window, text="Dodaj produkt", command=add_new_product)
+    product_add.pack(pady=5)
 
-product_del = tk.Button(window, text="Usuń produkt", command=remove_product)
-product_del.pack(pady=5)
+    product_del = tk.Button(window, text="Usuń produkt", command=remove_product)
+    product_del.pack(pady=5)
 
-tree = ttk.Treeview(window, columns=('id', 'product'), show='headings', height=10)
-tree.heading('id', text='idx')
-tree.heading('product', text='produkt')
+    tree = ttk.Treeview(window, columns=('id', 'product'), show='headings', height=10)
+    tree.heading('id', text='idx')
+    tree.heading('product', text='produkt')
 
-tree.column('id', width=50, anchor='center')
-tree.column('product', width=300, anchor='center')
-tree.pack(pady=5)
+    tree.column('id', width=50, anchor='center')
+    tree.column('product', width=300, anchor='center')
+    tree.pack(pady=5)
 
-read_from_json()
-window.mainloop()
+    read_from_json()
+    window.mainloop()
+    
+product_form()
