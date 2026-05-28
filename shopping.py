@@ -4,9 +4,18 @@ import json
 import os
 import tkinter.font as tkfont
 from PIL import Image, ImageTk
+import secrets
+import hashlib
+from dotenv import load_dotenv
+
+load_dotenv()
+
+username = os.getenv('APP_USERNAME')
+password = os.getenv('APP_USER_TOKEN')
 
 FILENAME = 'products.json'
 BG_COLOR = '#ffffff'
+SOL = b'\xad&}\x1e\xf3\x90\x89\xd3\x04\t\xebxo\xc1\x15_'
 
 def get_idx():
     ids = [ tree.item(i)['values'][0] for i in tree.get_children() ]
@@ -46,7 +55,34 @@ def remove_product():
         tree.delete(selected_id)
         save_to_json()
     except:
-        messagebox.showerror('Błąd', 'Nie zaznaczono rekordu do usunięcia')
+        messagebox.showerror('Błąd usunięcia produktu', 'Nie zaznaczono rekordu do usunięcia')
+
+def encode_text(text: str) -> str:
+    sol = secrets.token_hex(16)
+    encoded_text = hashlib.pbkdf2_hmac(hash_name='sha256', password=bytearray(text, encoding="utf-8"), salt=bytearray(sol, encoding="utf-8"), iterations=3)
+    full_hash = sol + encoded_text.hex()
+
+    return full_hash
+
+def verify_credentials(text: str, original_text: str) -> bool:
+
+    stored_sol = text[:32]
+    stored_pass = text[32:]
+    
+    new_hash = hashlib.pbkdf2_hmac(hash_name='sha256', password=original_text.encode("utf-8"), salt=stored_sol.encode("utf-8"), iterations=3)
+    
+    if stored_pass == new_hash.hex() and username == login_entry.get():
+        return True
+    else:
+        return False
+
+def verify_user():
+    
+    if verify_credentials(password, password_entry.get()):
+        login_window.destroy()
+        product_form()
+    else:
+        messagebox.showerror('Błąd logowania', f'Błędny login lub hasło')
 
 def product_form():
     global tree, entry_product
@@ -89,6 +125,8 @@ def product_form():
     
 def login_form():
     
+    global login_entry, password_entry, login_window
+    
     login_window = tk.Tk()
     login_window.title('Logowanie')
     login_window.resizable(False, False)
@@ -120,7 +158,7 @@ def login_form():
     password_entry = tk.Entry(login_window, width=40, show='*')
     password_entry.pack(pady=5)
     
-    login_btn = tk.Button(login_window, text='Zaloguj', width=35, border=1)
+    login_btn = tk.Button(login_window, text='Zaloguj', width=35, border=1, command=verify_user)
     login_btn.pack(fill='x', ipady=5, padx=75, pady=20)
 
     opened_image = Image.open('trolley.png')
