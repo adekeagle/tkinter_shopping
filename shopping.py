@@ -3,8 +3,10 @@ from tkinter import ttk, messagebox
 import json
 import os
 import tkinter.font as tkfont
+from PIL import Image, ImageTk
 
 FILENAME = 'products.json'
+BG_COLOR = '#ffffff'
 
 def get_idx():
     ids = [ tree.item(i)['values'][0] for i in tree.get_children() ]
@@ -89,7 +91,9 @@ def login_form():
     
     login_window = tk.Tk()
     login_window.title('Logowanie')
-
+    login_window.resizable(False, False)
+    login_window.configure(background=BG_COLOR)
+    
     SCREEN_WIDTH = login_window.winfo_screenwidth()
     SCREEN_HEIGHT = login_window.winfo_screenheight()
 
@@ -101,21 +105,34 @@ def login_form():
 
     login_window.geometry(f'{WIDTH}x{HEIGHT}+{x}+{y}')
 
-    head_lbl = tk.Label(login_window, text='Logowanie', font=tkfont.Font(size=30, weight='bold'), border=10)
-    head_lbl.pack(pady=5)
+    head_lbl = tk.Label(login_window, text='Logowanie', font=tkfont.Font(size=30, weight='bold'), bg=BG_COLOR)
+    head_lbl.pack(pady=(30,10))
     
-    login_lbl = tk.Label(login_window, text='Login:', anchor='w')
-    login_lbl.pack(pady=5)
+    login_lbl = tk.Label(login_window, text='Login:', anchor='w', padx=75, bg=BG_COLOR)
+    login_lbl.pack(fill='x')
     
     login_entry = tk.Entry(login_window, width=40)
     login_entry.pack(pady=5)
     
+    password_lbl = tk.Label(login_window, text='Password:', anchor='w', padx=75, bg=BG_COLOR)
+    password_lbl.pack(fill='x')
+    
     password_entry = tk.Entry(login_window, width=40, show='*')
     password_entry.pack(pady=5)
     
-    login_btn = tk.Button(login_window, text='Zaloguj')
-    login_btn.pack(pady=5)
+    login_btn = tk.Button(login_window, text='Zaloguj', width=35, border=1)
+    login_btn.pack(fill='x', ipady=5, padx=75, pady=20)
+
+    opened_image = Image.open('trolley.png')
+    resized_img = opened_image.resize(size=(150, 150), resample=Image.Resampling.LANCZOS)
+    
+    photo = ImageTk.PhotoImage(resized_img)
+    photo_lbl = tk.Label(login_window, image=photo)
+    photo_lbl.pack(pady=(20, 10))
+    photo_lbl.image = photo
+    photo_lbl.configure(border=0)
+    
     
     login_window.mainloop()
-    
+
 login_form()
