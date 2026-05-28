@@ -2,6 +2,7 @@ import tkinter as tk
 from tkinter import ttk, messagebox
 import json
 import os
+import tkinter.font as tkfont
 
 FILENAME = 'products.json'
 
@@ -84,4 +85,37 @@ def product_form():
     read_from_json()
     window.mainloop()
     
-product_form()
+def login_form():
+    
+    login_window = tk.Tk()
+    login_window.title('Logowanie')
+
+    SCREEN_WIDTH = login_window.winfo_screenwidth()
+    SCREEN_HEIGHT = login_window.winfo_screenheight()
+
+    WIDTH = 400
+    HEIGHT = 500
+
+    x = (SCREEN_WIDTH - WIDTH) // 2
+    y = (SCREEN_HEIGHT - HEIGHT) // 2
+
+    login_window.geometry(f'{WIDTH}x{HEIGHT}+{x}+{y}')
+
+    head_lbl = tk.Label(login_window, text='Logowanie', font=tkfont.Font(size=30, weight='bold'), border=10)
+    head_lbl.pack(pady=5)
+    
+    login_lbl = tk.Label(login_window, text='Login:', anchor='w')
+    login_lbl.pack(pady=5)
+    
+    login_entry = tk.Entry(login_window, width=40)
+    login_entry.pack(pady=5)
+    
+    password_entry = tk.Entry(login_window, width=40, show='*')
+    password_entry.pack(pady=5)
+    
+    login_btn = tk.Button(login_window, text='Zaloguj')
+    login_btn.pack(pady=5)
+    
+    login_window.mainloop()
+    
+login_form()
