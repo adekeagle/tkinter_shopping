@@ -68,21 +68,15 @@ def encode_text(text: str) -> str:
 
     return full_hash
 
-def verify_credentials(text: str, original_text: str) -> bool:
-
-    stored_sol = text[:32]
-    stored_pass = text[32:]
-    
-    new_hash = hashlib.pbkdf2_hmac(hash_name='sha256', password=original_text.encode("utf-8"), salt=stored_sol.encode("utf-8"), iterations=3)
-    
-    if stored_pass == new_hash.hex() and username == login_entry.get():
-        return True
-    else:
-        return False
+def verify_credentials() -> bool:
+    return (
+        login_entry.get() == username and
+        password_entry.get() == password
+    )
 
 def verify_user():
     
-    if verify_credentials(password, password_entry.get()):
+    if verify_credentials():
         login_window.destroy()
         product_form()
     else:
