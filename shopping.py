@@ -10,8 +10,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-username = "admin"
-password = "haslo123"
+username = os.getenv('APP_USERNAME')
+password = os.getenv('APP_USER_TOKEN')
 
 FILENAME = 'products.json'
 BG_COLOR = '#ffffff'
@@ -68,15 +68,21 @@ def encode_text(text: str) -> str:
 
     return full_hash
 
-def verify_credentials() -> bool:
-    return (
-        login_entry.get() == username and
-        password_entry.get() == password
-    )
+def verify_credentials(text: str, original_text: str) -> bool:
+
+    stored_sol = text[:32]
+    stored_pass = text[32:]
+    
+    new_hash = hashlib.pbkdf2_hmac(hash_name='sha256', password=original_text.encode("utf-8"), salt=stored_sol.encode("utf-8"), iterations=3)
+    
+    if stored_pass == new_hash.hex() and username == login_entry.get():
+        return True
+    else:
+        return False
 
 def verify_user():
     
-    if verify_credentials():
+    if verify_credentials(password, password_entry.get()):
         login_window.destroy()
         product_form()
     else:
@@ -190,7 +196,7 @@ def login_form():
     login_btn = tk.Button(login_window, text='Zaloguj', width=35, border=1, command=verify_user)
     login_btn.pack(fill='x', ipady=5, padx=75, pady=20)
 
-    opened_image = Image.open('tkinter_shopping/trolley.png')
+    opened_image = Image.open('trolley.png')
     resized_img = opened_image.resize(size=(150, 150), resample=Image.Resampling.LANCZOS)
     
     photo = ImageTk.PhotoImage(resized_img)
