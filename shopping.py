@@ -10,8 +10,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-username = os.getenv('APP_USERNAME')
-password = os.getenv('APP_USER_TOKEN')
+username = "admin"
+password = "haslo123"
 
 FILENAME = 'products.json'
 BG_COLOR = '#ffffff'
